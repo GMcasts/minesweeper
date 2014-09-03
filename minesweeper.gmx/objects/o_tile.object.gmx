@@ -103,15 +103,15 @@ mouse_y &gt;= bbox_top &amp;&amp; mouse_y &lt;= bbox_bottom){
 //verify it is not a flag square
 if(!global.pause &amp;&amp; !global.cant_click)
   {
-  for(i=0;i&lt;=4;i++){
+  for(i=0;i&lt;=0;i++){
       if(o_player.hold_time&gt;500000 &amp;&amp; !o_player.flag_triggered &amp;&amp; device_mouse_x(i) &gt;= bbox_left &amp;&amp; device_mouse_x(i) &lt;= bbox_right &amp;&amp;
       device_mouse_y(i) &gt;= bbox_top &amp;&amp; device_mouse_y(i) &lt;= bbox_bottom){
           if(o_board.flags &gt; 0 &amp;&amp; image_index == 0){
               instance_create(x,y, o_flag_effect);
               image_index = 6;
               o_board.flags -= 1;
+              o_player.flag_triggered = true;
           }
-          o_player.flag_triggered = true;
       }
       if(device_mouse_check_button(i,mb_left)) {
           with(o_player){

@@ -25,6 +25,14 @@
     <script>scripts\check_end_game.gml</script>
     <script>scripts\refresh_game.gml</script>
     <script>scripts\determine_bombs.gml</script>
+    <scripts name="hobo_test">
+      <script>scripts\instance_of.gml</script>
+      <script>scripts\it.gml</script>
+      <script>scripts\run_test_stack.gml</script>
+      <script>scripts\they_exist.gml</script>
+      <script>scripts\draw_test.gml</script>
+      <script>scripts\hobo_test.gml</script>
+    </scripts>
   </scripts>
   <fonts name="fonts">
     <font>fonts\f_ui</font>
@@ -39,14 +47,15 @@
     <object>objects\o_flag_effect</object>
     <object>objects\o_pause</object>
     <object>objects\o_menu</object>
+    <object>objects\TEST</object>
   </objects>
   <rooms name="rooms">
     <room>rooms\r_menu</room>
     <room>rooms\r_endless</room>
   </rooms>
   <constants number="2">
-    <constant name="GM_build_date">41875.280566331</constant>
-    <constant name="GM_version">'1.0.2'</constant>
+    <constant name="GM_build_date">41885.1434533218</constant>
+    <constant name="GM_version">'1.0.0.0'</constant>
   </constants>
   <help>
     <rtf>help.rtf</rtf>
