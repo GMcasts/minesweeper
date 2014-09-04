@@ -73,9 +73,20 @@ draw_rectangle(room_width/2 - 200, 350, room_width/2 + 200, 450, false);
 draw_set_color(c_white);
 draw_text(room_width/2, 375, "TIMED MODE");
 draw_set_alpha(0.5);
-draw_set_color(c_red);
+if(!o_score.TIMED_MODE_UNLOCKED)
+  {
+  draw_set_color(c_red);
+  }
+else
+  {
+  draw_set_color(c_dkgray);
+  }
 draw_rectangle(room_width/2 - 200, 350, room_width/2 + 200, 450, false);
 draw_set_alpha(1);
+draw_set_color(c_white);
+draw_set_font(f_unlock);
+draw_text(room_width/2, 475, "Complete 8 bombs in Endless");
+draw_set_font(f_menu);
 
 draw_set_color(c_dkgray);
 draw_rectangle(room_width/2 - 200, 550, room_width/2 + 200, 650, false);
@@ -85,6 +96,10 @@ draw_set_alpha(0.5);
 draw_set_color(c_red);
 draw_rectangle(room_width/2 - 200, 550, room_width/2 + 200, 650, false);
 draw_set_alpha(1);
+draw_set_font(f_unlock);
+draw_set_color(c_white);
+draw_text(room_width/2, 675, "Complete 3 Timed Levels");
+draw_set_font(f_menu);
 
 </string>
           </argument>
