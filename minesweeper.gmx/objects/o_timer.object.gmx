@@ -3,7 +3,7 @@
   <spriteName>&lt;undefined&gt;</spriteName>
   <solid>0</solid>
   <visible>-1</visible>
-  <depth>-100</depth>
+  <depth>-99</depth>
   <persistent>0</persistent>
   <parentName>&lt;undefined&gt;</parentName>
   <maskName>&lt;undefined&gt;</maskName>
@@ -25,19 +25,16 @@
         <arguments>
           <argument>
             <kind>1</kind>
-            <string>global.pause = true;
-can_unpause = false;
-alarm[0] = 10;
-o_score.PAUSED = true;
-o_score.time_passed += o_score.seconds;
-o_score.seconds = 0;
-
+            <string>can_click = false; alarm[0] = 15;
+finished = false;
+total_ready = false;
+//o_score.start_time = current_time;
 </string>
           </argument>
         </arguments>
       </action>
     </event>
-    <event eventtype="1" enumb="0">
+    <event eventtype="2" enumb="1">
       <action>
         <libid>1</libid>
         <id>603</id>
@@ -54,13 +51,7 @@ o_score.seconds = 0;
         <arguments>
           <argument>
             <kind>1</kind>
-            <string>global.pause = false;
-o_score.start_time = current_time;
-
-with(o_board){
-  alarm[0] = 30;
-  hold_time = 0.0;
-}
+            <string>total_ready = true;
 </string>
           </argument>
         </arguments>
@@ -83,7 +74,7 @@ with(o_board){
         <arguments>
           <argument>
             <kind>1</kind>
-            <string>can_unpause = true;
+            <string>can_click = true;
 </string>
           </argument>
         </arguments>
@@ -106,26 +97,36 @@ with(o_board){
         <arguments>
           <argument>
             <kind>1</kind>
-            <string>for(i=0;i&lt;=4;i++){
-    if(device_mouse_x(i) &gt;= room_width/2 - 200 &amp;&amp; device_mouse_x(i) &lt;= room_width/2 + 200 &amp;&amp;
-    device_mouse_y(i) &gt;= 350 &amp;&amp; device_mouse_y(i) &lt;= 450 &amp;&amp;
-    device_mouse_check_button(i, mb_left) &amp;&amp; global.pause &amp;&amp; can_unpause)
+            <string>
+if(o_score.started &amp;&amp; !o_score.PAUSED)
+  {
+  time_diff = current_time - o_score.start_time;
+  o_score.seconds = time_diff / 1000;
+  }
+else
+  {
+  for(i=0;i&lt;=4;i++)
+    {
+    if(device_mouse_x(i) &gt;= 0 &amp;&amp; device_mouse_x(i) &lt;= room_width &amp;&amp;
+    device_mouse_y(i) &gt;= 0 &amp;&amp; device_mouse_y(i) &lt;= room_height &amp;&amp;
+    device_mouse_check_button(i, mb_left) &amp;&amp; can_click &amp;&amp; !finished)
       {
-        if(room==2)
-          {
-            o_score.PAUSED = false;
-          }
-        instance_destroy();
+      o_score.started = true;
+      o_score.start_time = current_time;
       }
-      //room_width/2 - 200, 550, room_width/2 + 200, 650
-      // add quit
-    if(device_mouse_x(i) &gt;= room_width/2 - 200 &amp;&amp; device_mouse_x(i) &lt;= room_width/2 + 200 &amp;&amp;
-    device_mouse_y(i) &gt;= 550 &amp;&amp; device_mouse_y(i) &lt;= 650 &amp;&amp;
-    device_mouse_check_button(i, mb_left) &amp;&amp; global.pause &amp;&amp; can_unpause)
-      {
-        room_goto(0);
-      }
-}
+    }
+  }
+  
+if(finished)
+  {
+  if(device_mouse_check_button_released(0, mb_left) &amp;&amp; total_ready)
+    {
+    o_score.PAUSED = true;
+    o_score.time_passed = 0;
+    o_score.seconds = 0;
+    room_goto(0);
+    }
+  }
 </string>
           </argument>
         </arguments>
@@ -148,31 +149,23 @@ with(o_board){
         <arguments>
           <argument>
             <kind>1</kind>
-            <string>draw_set_alpha(1);
-draw_set_color(c_black);
-
-draw_rectangle(0,0,room_width, room_height, false);
-draw_set_alpha(1);
-
-draw_set_color(c_orange);
-draw_rectangle(0,0,room_width,100,false);
-
-draw_set_halign(fa_center);
-draw_set_color(c_white);
-  draw_text(room_width/2,25,"MINESWEEPER TAP");
-
-draw_text(room_width/2, 200, "MENU");
-
-draw_set_color(c_teal);
-draw_rectangle(room_width/2 - 200, 350, room_width/2 + 200, 450, false);
-draw_set_color(c_white);
-draw_text(room_width/2, 375, "CONTINUE");
-
-draw_set_color(c_dkgray);
-draw_rectangle(room_width/2 - 200, 550, room_width/2 + 200, 650, false);
-draw_set_color(c_white);
-draw_text(room_width/2, 575, "QUIT");
-
+            <string>if(!o_score.started)
+  {
+  draw_set_color(c_red);
+  draw_set_font(f_timer);
+  draw_set_halign(fa_center);
+  draw_text(room_width/2, 300, "Complete all levels!###TAP TO START!");
+  }
+if(finished)
+  {
+  draw_set_alpha(1);
+  draw_set_color(c_black);
+  draw_set_font(f_timer);
+  draw_rectangle(0,0,room_width,room_height,false);
+  draw_set_color(c_white);
+  draw_set_halign(fa_center);
+  draw_text(room_width/2, 400, "FINISH TIME: "+string(o_score.time_passed+o_score.seconds));
+  }
 </string>
           </argument>
         </arguments>

@@ -118,7 +118,7 @@ for(i=0;i&lt;6;i++){
     }
 }
 
-for(i=0;i&lt;=4;i++){
+for(i=0;i&lt;=0;i++){
     if(device_mouse_x(i) &gt;= 0 &amp;&amp; device_mouse_x(i) &lt;= room_width &amp;&amp;
     device_mouse_y(i) &gt;= 800 &amp;&amp; device_mouse_y(i) &lt;= room_height &amp;&amp;
     device_mouse_check_button(i, mb_left) &amp;&amp; !global.pause)
@@ -157,8 +157,22 @@ draw_text(150,800, string(flags));
 
 draw_sprite(s_bomb, 0, 0, 800);
 draw_text(50,800, string(bombs));
-
-draw_text(250, 800, string(global.wins)+" / "+string(global.attempts)+" (Wins / Attempts)");
+if(room==1)
+  {
+  draw_text(250, 800, string(global.wins)+" / "+string(global.attempts)+" (Wins / Attempts)");
+  }
+else if(room==2)
+  {
+  draw_text(250, 800, string(o_score.seconds+o_score.time_passed));
+  if(o_score.BEST_TIMED_RUN == 0)
+    {
+      draw_text(400, 800, "Setting best time...");
+    }
+  else
+    {
+      draw_text(400, 800, "Time to Beat: "+string(o_score.BEST_TIMED_RUN));
+    }
+  }
 
 </string>
           </argument>

@@ -25,7 +25,8 @@
         <arguments>
           <argument>
             <kind>1</kind>
-            <string>alarm[0] = 45;
+            <string>o_score.TOTAL_FLAGS_DROPPED += 1;
+alarm[0] = 45;
 ratio = 5.0;
 </string>
           </argument>

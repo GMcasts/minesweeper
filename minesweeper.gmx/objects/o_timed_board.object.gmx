@@ -3,7 +3,7 @@
   <spriteName>&lt;undefined&gt;</spriteName>
   <solid>0</solid>
   <visible>-1</visible>
-  <depth>-100</depth>
+  <depth>0</depth>
   <persistent>0</persistent>
   <parentName>&lt;undefined&gt;</parentName>
   <maskName>&lt;undefined&gt;</maskName>
@@ -25,41 +25,46 @@
         <arguments>
           <argument>
             <kind>1</kind>
-            <string>global.pause = true;
-can_unpause = false;
-alarm[0] = 10;
-o_score.PAUSED = true;
-o_score.time_passed += o_score.seconds;
-o_score.seconds = 0;
+            <string>alarm[0] = 10;
+win_triggered = false;
+// starting with a 6x6 board
+//build board
+for(i=0;i&lt;6;i++){
+    for(q=0;q&lt;6;q++){
+        instance_create(i*128, q*128, o_tile);
+    }
+}
+// builds empty board
+board = ds_grid_create(6,6);
+for(i=0;i&lt;6;i++){
+    for(q=0;q&lt;6;q++){
+        ds_grid_set(board,i,q, 1);
+    }
+}
 
-</string>
-          </argument>
-        </arguments>
-      </action>
-    </event>
-    <event eventtype="1" enumb="0">
-      <action>
-        <libid>1</libid>
-        <id>603</id>
-        <kind>7</kind>
-        <userelative>0</userelative>
-        <isquestion>0</isquestion>
-        <useapplyto>-1</useapplyto>
-        <exetype>2</exetype>
-        <functionname></functionname>
-        <codestring></codestring>
-        <whoName>self</whoName>
-        <relative>0</relative>
-        <isnot>0</isnot>
-        <arguments>
-          <argument>
-            <kind>1</kind>
-            <string>global.pause = false;
-o_score.start_time = current_time;
+//adds the bombs
+bombs = determine_bombs();
+flags = bombs;
+bomb_location[0] = noone;
+count = 0;
+temp_bombs = bombs;
+while(temp_bombs != 0) {
+    rx = random_range(0,5); ry = random_range(0,5);
+    if(!bomb(rx,ry)){
+        ds_grid_set(board, rx, ry, 2);
+        q[0] = rx; q[1] = ry;
+        bomb_location[count] = q; count+=1;
+        temp_bombs --;
+    }
+}
 
-with(o_board){
-  alarm[0] = 30;
-  hold_time = 0.0;
+// fill in the proper bomb warnings
+for(i=0;i&lt;6;i++){
+    for(q=0;q&lt;6;q++){
+        if(!bomb(i,q)){
+            count_bombs(i, q);
+        }
+    }
 }
 </string>
           </argument>
@@ -83,7 +88,7 @@ with(o_board){
         <arguments>
           <argument>
             <kind>1</kind>
-            <string>can_unpause = true;
+            <string>global.cant_click = false;
 </string>
           </argument>
         </arguments>
@@ -106,26 +111,22 @@ with(o_board){
         <arguments>
           <argument>
             <kind>1</kind>
-            <string>for(i=0;i&lt;=4;i++){
-    if(device_mouse_x(i) &gt;= room_width/2 - 200 &amp;&amp; device_mouse_x(i) &lt;= room_width/2 + 200 &amp;&amp;
-    device_mouse_y(i) &gt;= 350 &amp;&amp; device_mouse_y(i) &lt;= 450 &amp;&amp;
-    device_mouse_check_button(i, mb_left) &amp;&amp; global.pause &amp;&amp; can_unpause)
-      {
-        if(room==2)
-          {
-            o_score.PAUSED = false;
-          }
-        instance_destroy();
-      }
-      //room_width/2 - 200, 550, room_width/2 + 200, 650
-      // add quit
-    if(device_mouse_x(i) &gt;= room_width/2 - 200 &amp;&amp; device_mouse_x(i) &lt;= room_width/2 + 200 &amp;&amp;
-    device_mouse_y(i) &gt;= 550 &amp;&amp; device_mouse_y(i) &lt;= 650 &amp;&amp;
-    device_mouse_check_button(i, mb_left) &amp;&amp; global.pause &amp;&amp; can_unpause)
-      {
-        room_goto(0);
-      }
+            <string>if(o_board.flags == 0){
+    if(check_end_game()==true &amp;&amp; !win_triggered){
+        instance_create(x,y,o_winner);
+        win_triggered = true;
+    }
 }
+
+for(i=0;i&lt;=4;i++){
+    if(device_mouse_x(i) &gt;= 0 &amp;&amp; device_mouse_x(i) &lt;= room_width &amp;&amp;
+    device_mouse_y(i) &gt;= 800 &amp;&amp; device_mouse_y(i) &lt;= room_height &amp;&amp;
+    device_mouse_check_button(i, mb_left) &amp;&amp; !global.pause)
+      {
+        instance_create(x,y,o_pause);
+        global.cant_click = true;
+      }
+  }
 </string>
           </argument>
         </arguments>
@@ -148,30 +149,16 @@ with(o_board){
         <arguments>
           <argument>
             <kind>1</kind>
-            <string>draw_set_alpha(1);
-draw_set_color(c_black);
+            <string>draw_set_color(c_white);
+draw_set_halign(fa_left);
+draw_set_font(f_ui);
+draw_sprite(s_flag,0,100,800);
+draw_text(150,800, string(flags));
 
-draw_rectangle(0,0,room_width, room_height, false);
-draw_set_alpha(1);
+draw_sprite(s_bomb, 0, 0, 800);
+draw_text(50,800, string(bombs));
 
-draw_set_color(c_orange);
-draw_rectangle(0,0,room_width,100,false);
-
-draw_set_halign(fa_center);
-draw_set_color(c_white);
-  draw_text(room_width/2,25,"MINESWEEPER TAP");
-
-draw_text(room_width/2, 200, "MENU");
-
-draw_set_color(c_teal);
-draw_rectangle(room_width/2 - 200, 350, room_width/2 + 200, 450, false);
-draw_set_color(c_white);
-draw_text(room_width/2, 375, "CONTINUE");
-
-draw_set_color(c_dkgray);
-draw_rectangle(room_width/2 - 200, 550, room_width/2 + 200, 650, false);
-draw_set_color(c_white);
-draw_text(room_width/2, 575, "QUIT");
+draw_text(250, 800, string(global.wins)+" / "+string(global.attempts)+" (Wins / Attempts)");
 
 </string>
           </argument>

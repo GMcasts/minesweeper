@@ -26,6 +26,19 @@
           <argument>
             <kind>1</kind>
             <string>TIMED_MODE_UNLOCKED = false;
+CHALLENGE_MODE_UNLOCKED = false;
+TOTAL_BOMBS_HIT = 0;
+TOTAL_ATTEMPTS = 0;
+TOTAL_WINS = 0;
+TOTAL_FLAGS_DROPPED = 0;
+TOTAL_FLAGS_PICKED_UP = 0;
+TOTAL_TILES_UNCOVERED = false;
+BEST_TIMED_RUN = 0;
+//TIMER_SECONDS = 0;
+started = false;
+seconds = 0;
+PAUSED = false;
+time_passed = 0;
 </string>
           </argument>
         </arguments>

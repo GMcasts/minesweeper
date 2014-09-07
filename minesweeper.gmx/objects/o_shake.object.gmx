@@ -3,7 +3,7 @@
   <spriteName>&lt;undefined&gt;</spriteName>
   <solid>0</solid>
   <visible>-1</visible>
-  <depth>-100</depth>
+  <depth>0</depth>
   <persistent>0</persistent>
   <parentName>&lt;undefined&gt;</parentName>
   <maskName>&lt;undefined&gt;</maskName>
@@ -25,13 +25,9 @@
         <arguments>
           <argument>
             <kind>1</kind>
-            <string>global.pause = true;
-can_unpause = false;
-alarm[0] = 10;
-o_score.PAUSED = true;
-o_score.time_passed += o_score.seconds;
-o_score.seconds = 0;
-
+            <string>alarm[0] = 20;
+origin_x = view_xview[0];
+origin_y = view_yview[0];
 </string>
           </argument>
         </arguments>
@@ -54,13 +50,8 @@ o_score.seconds = 0;
         <arguments>
           <argument>
             <kind>1</kind>
-            <string>global.pause = false;
-o_score.start_time = current_time;
-
-with(o_board){
-  alarm[0] = 30;
-  hold_time = 0.0;
-}
+            <string>view_xview[0] = origin_x;
+view_yview[0] = origin_y;
 </string>
           </argument>
         </arguments>
@@ -83,7 +74,7 @@ with(o_board){
         <arguments>
           <argument>
             <kind>1</kind>
-            <string>can_unpause = true;
+            <string>instance_destroy();
 </string>
           </argument>
         </arguments>
@@ -106,73 +97,8 @@ with(o_board){
         <arguments>
           <argument>
             <kind>1</kind>
-            <string>for(i=0;i&lt;=4;i++){
-    if(device_mouse_x(i) &gt;= room_width/2 - 200 &amp;&amp; device_mouse_x(i) &lt;= room_width/2 + 200 &amp;&amp;
-    device_mouse_y(i) &gt;= 350 &amp;&amp; device_mouse_y(i) &lt;= 450 &amp;&amp;
-    device_mouse_check_button(i, mb_left) &amp;&amp; global.pause &amp;&amp; can_unpause)
-      {
-        if(room==2)
-          {
-            o_score.PAUSED = false;
-          }
-        instance_destroy();
-      }
-      //room_width/2 - 200, 550, room_width/2 + 200, 650
-      // add quit
-    if(device_mouse_x(i) &gt;= room_width/2 - 200 &amp;&amp; device_mouse_x(i) &lt;= room_width/2 + 200 &amp;&amp;
-    device_mouse_y(i) &gt;= 550 &amp;&amp; device_mouse_y(i) &lt;= 650 &amp;&amp;
-    device_mouse_check_button(i, mb_left) &amp;&amp; global.pause &amp;&amp; can_unpause)
-      {
-        room_goto(0);
-      }
-}
-</string>
-          </argument>
-        </arguments>
-      </action>
-    </event>
-    <event eventtype="8" enumb="0">
-      <action>
-        <libid>1</libid>
-        <id>603</id>
-        <kind>7</kind>
-        <userelative>0</userelative>
-        <isquestion>0</isquestion>
-        <useapplyto>-1</useapplyto>
-        <exetype>2</exetype>
-        <functionname></functionname>
-        <codestring></codestring>
-        <whoName>self</whoName>
-        <relative>0</relative>
-        <isnot>0</isnot>
-        <arguments>
-          <argument>
-            <kind>1</kind>
-            <string>draw_set_alpha(1);
-draw_set_color(c_black);
-
-draw_rectangle(0,0,room_width, room_height, false);
-draw_set_alpha(1);
-
-draw_set_color(c_orange);
-draw_rectangle(0,0,room_width,100,false);
-
-draw_set_halign(fa_center);
-draw_set_color(c_white);
-  draw_text(room_width/2,25,"MINESWEEPER TAP");
-
-draw_text(room_width/2, 200, "MENU");
-
-draw_set_color(c_teal);
-draw_rectangle(room_width/2 - 200, 350, room_width/2 + 200, 450, false);
-draw_set_color(c_white);
-draw_text(room_width/2, 375, "CONTINUE");
-
-draw_set_color(c_dkgray);
-draw_rectangle(room_width/2 - 200, 550, room_width/2 + 200, 650, false);
-draw_set_color(c_white);
-draw_text(room_width/2, 575, "QUIT");
-
+            <string>view_xview[0] += random_range(-2,2);
+view_yview[0] += random_range(-2,2);
 </string>
           </argument>
         </arguments>

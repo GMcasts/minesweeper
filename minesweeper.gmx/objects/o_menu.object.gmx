@@ -28,9 +28,21 @@
             <string>for(i=0;i&lt;=4;i++){
     if(device_mouse_x(i) &gt;= room_width/2 - 200 &amp;&amp; device_mouse_x(i) &lt;= room_width/2 + 200 &amp;&amp;
     device_mouse_y(i) &gt;= 175 &amp;&amp; device_mouse_y(i) &lt;= 275 &amp;&amp;
-    device_mouse_check_button(i, mb_left))
+    device_mouse_check_button_pressed(i, mb_left))
       {
-        room_goto_next();
+        room_goto(1);
+      }
+    if(device_mouse_x(i) &gt;= room_width/2 - 200 &amp;&amp; device_mouse_x(i) &lt;= room_width/2 + 200 &amp;&amp;
+    device_mouse_y(i) &gt;= 350 &amp;&amp; device_mouse_y(i) &lt;= 450 &amp;&amp;
+    device_mouse_check_button_pressed(i, mb_left) &amp;&amp; o_score.TIMED_MODE_UNLOCKED)
+      {
+        room_goto(2);
+      }
+    if(device_mouse_x(i) &gt;= room_width/2 - 200 &amp;&amp; device_mouse_x(i) &lt;= room_width/2 + 200 &amp;&amp;
+    device_mouse_y(i) &gt;= 550 &amp;&amp; device_mouse_y(i) &lt;= 650 &amp;&amp;
+    device_mouse_check_button_pressed(i, mb_left))
+      {
+        room_goto(3);
       }
 }
 </string>
@@ -70,35 +82,44 @@ draw_text(room_width/2, 200, "ENDLESS MODE");
 
 draw_set_color(c_dkgray);
 draw_rectangle(room_width/2 - 200, 350, room_width/2 + 200, 450, false);
+draw_set_alpha(1);
 draw_set_color(c_white);
 draw_text(room_width/2, 375, "TIMED MODE");
 draw_set_alpha(0.5);
 if(!o_score.TIMED_MODE_UNLOCKED)
   {
   draw_set_color(c_red);
+  draw_rectangle(room_width/2 - 200, 350, room_width/2 + 200, 450, false);
+  draw_set_alpha(1);
+  draw_set_color(c_white);
+  draw_set_font(f_unlock);
+  draw_text(room_width/2, 475, "Complete 8 bombs in Endless");
+  draw_set_font(f_menu);
   }
 else
   {
-  draw_set_color(c_dkgray);
+  draw_set_alpha(1);
+  draw_set_font(f_unlock);
+  draw_set_color(c_white);
+  
+  if(o_score.BEST_TIMED_RUN==0)
+    {
+      draw_text(room_width/2, 475, "No best time to speak of");
+    }
+  else
+    {
+      draw_text(room_width/2, 475, "Current Best: "+string(o_score.BEST_TIMED_RUN));    
+    }
+  
   }
-draw_rectangle(room_width/2 - 200, 350, room_width/2 + 200, 450, false);
 draw_set_alpha(1);
-draw_set_color(c_white);
-draw_set_font(f_unlock);
-draw_text(room_width/2, 475, "Complete 8 bombs in Endless");
-draw_set_font(f_menu);
-
-draw_set_color(c_dkgray);
+draw_set_color(c_green);
 draw_rectangle(room_width/2 - 200, 550, room_width/2 + 200, 650, false);
 draw_set_color(c_white);
-draw_text(room_width/2, 575, "CHALLENGE MODE");
-draw_set_alpha(0.5);
-draw_set_color(c_red);
-draw_rectangle(room_width/2 - 200, 550, room_width/2 + 200, 650, false);
-draw_set_alpha(1);
-draw_set_font(f_unlock);
-draw_set_color(c_white);
-draw_text(room_width/2, 675, "Complete 3 Timed Levels");
+draw_text(room_width/2, 575, "TAP STATS");
+//draw_set_alpha(0.5);
+//draw_set_color(c_red);
+//draw_rectangle(room_width/2 - 200, 550, room_width/2 + 200, 650, false);
 draw_set_font(f_menu);
 
 </string>

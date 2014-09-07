@@ -25,7 +25,20 @@
         <arguments>
           <argument>
             <kind>1</kind>
-            <string>can_restart = false;
+            <string>if(room==2)
+  {
+  if(global.wins &gt;= 4)
+      {
+      o_score.PAUSED = true;
+      o_timer.finished = true;
+      o_score.BEST_TIMED_RUN = o_score.time_passed + o_score.seconds;
+      o_timer.alarm[1] = 30;
+      }
+  o_score.PAUSED = true
+  o_score.time_passed += o_score.seconds;
+  o_score.seconds = 0;
+  }
+can_restart = false;
 alarm[0] = 60;
 
 </string>

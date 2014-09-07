@@ -36,6 +36,7 @@
   </scripts>
   <fonts name="fonts">
     <font>fonts\f_ui</font>
+    <font>fonts\f_timer</font>
     <font>fonts\f_menu</font>
     <font>fonts\f_unlock</font>
   </fonts>
@@ -48,15 +49,21 @@
     <object>objects\o_flag_effect</object>
     <object>objects\o_pause</object>
     <object>objects\o_menu</object>
-    <object>objects\TEST</object>
     <object>objects\o_score</object>
+    <object>objects\o_shake</object>
+    <object>objects\o_timer</object>
+    <object>objects\o_stats</object>
+    <object>objects\TEST</object>
   </objects>
   <rooms name="rooms">
     <room>rooms\r_menu</room>
     <room>rooms\r_endless</room>
+    <room>rooms\r_timed</room>
+    <room>rooms\r_stats</room>
+    <room>rooms\room4</room>
   </rooms>
   <constants number="2">
-    <constant name="GM_build_date">41886.8143385417</constant>
+    <constant name="GM_build_date">41889.0982340856</constant>
     <constant name="GM_version">'1.0.0.0'</constant>
   </constants>
   <help>
