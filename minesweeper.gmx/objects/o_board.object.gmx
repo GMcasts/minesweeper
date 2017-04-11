@@ -28,16 +28,21 @@
             <string>alarm[0] = 10;
 win_triggered = false;
 // starting with a 6x6 board
+BOARD_SIZE = 10;
+SCALE_RATIO = 0.6;
+TILE_WIDTH = round(128 * SCALE_RATIO);
 //build board
-for(i=0;i&lt;6;i++){
-    for(q=0;q&lt;6;q++){
-        instance_create(i*128, q*128, o_tile);
+tile_object_grid = ds_grid_create(BOARD_SIZE, BOARD_SIZE);
+for(i=0;i&lt;BOARD_SIZE;i++) {
+    for(q=0;q&lt;BOARD_SIZE;q++) {
+        temp_tile = instance_create(i*TILE_WIDTH, q*TILE_WIDTH, o_tile);
+        ds_grid_set(tile_object_grid, i, q, temp_tile);
     }
 }
 // builds empty board
-board = ds_grid_create(6,6);
-for(i=0;i&lt;6;i++){
-    for(q=0;q&lt;6;q++){
+board = ds_grid_create(BOARD_SIZE,BOARD_SIZE);
+for(i=0;i&lt;BOARD_SIZE;i++) {
+    for(q=0;q&lt;BOARD_SIZE;q++) {
         ds_grid_set(board,i,q, 1);
     }
 }
@@ -49,18 +54,20 @@ bomb_location[0] = noone;
 count = 0;
 temp_bombs = bombs;
 while(temp_bombs != 0) {
-    rx = random_range(0,5); ry = random_range(0,5);
+    rx = irandom_range(0,BOARD_SIZE-1); ry = irandom_range(0,BOARD_SIZE-1);
     if(!bomb(rx,ry)){
         ds_grid_set(board, rx, ry, 2);
-        q[0] = rx; q[1] = ry;
-        bomb_location[count] = q; count+=1;
+        //q[0] = rx; q[1] = ry;
+        //bomb_location[count] = q;
+        bomb_location[count] = string(rx)+","+string(ry);
+        count++;
         temp_bombs --;
     }
 }
 
 // fill in the proper bomb warnings
-for(i=0;i&lt;6;i++){
-    for(q=0;q&lt;6;q++){
+for(i=0;i&lt;BOARD_SIZE;i++){
+    for(q=0;q&lt;BOARD_SIZE;q++){
         if(!bomb(i,q)){
             count_bombs(i, q);
         }
@@ -112,21 +119,21 @@ for(i=0;i&lt;6;i++){
           <argument>
             <kind>1</kind>
             <string>if(o_board.flags == 0){
-    if(check_end_game()==true &amp;&amp; !win_triggered){
+    if(check_end_game() == true &amp;&amp; !win_triggered){
         instance_create(x,y,o_winner);
         win_triggered = true;
     }
 }
 
 for(i=0;i&lt;=0;i++){
-    if(device_mouse_x(i) &gt;= 0 &amp;&amp; device_mouse_x(i) &lt;= room_width &amp;&amp;
+    if(!global.pause &amp;&amp; device_mouse_x(i) &gt;= 0 &amp;&amp; device_mouse_x(i) &lt;= room_width &amp;&amp;
     device_mouse_y(i) &gt;= 800 &amp;&amp; device_mouse_y(i) &lt;= room_height &amp;&amp;
-    device_mouse_check_button(i, mb_left) &amp;&amp; !global.pause)
+    device_mouse_check_button(i, mb_left))
       {
         instance_create(x,y,o_pause);
         global.cant_click = true;
       }
-  }
+}
 </string>
           </argument>
         </arguments>

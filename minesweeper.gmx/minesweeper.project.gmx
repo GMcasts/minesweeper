@@ -14,14 +14,6 @@
   <backgrounds name="background"/>
   <paths name="paths"/>
   <scripts name="scripts">
-    <scripts name="hobo_test">
-      <script>scripts\draw_test.gml</script>
-      <script>scripts\hobo_test.gml</script>
-      <script>scripts\instance_of.gml</script>
-      <script>scripts\it.gml</script>
-      <script>scripts\run_test_stack.gml</script>
-      <script>scripts\they_exist.gml</script>
-    </scripts>
     <script>scripts\bomb.gml</script>
     <script>scripts\blank.gml</script>
     <script>scripts\count_bombs.gml</script>
@@ -33,16 +25,27 @@
     <script>scripts\check_end_game.gml</script>
     <script>scripts\refresh_game.gml</script>
     <script>scripts\determine_bombs.gml</script>
+    <script>scripts\write_to_ini.gml</script>
+    <scripts name="hoboTest">
+      <script>scripts\fail.gml</script>
+      <script>scripts\draw_test.gml</script>
+      <script>scripts\hobo_init.gml</script>
+      <script>scripts\instance_of.gml</script>
+      <script>scripts\it.gml</script>
+      <script>scripts\run_test.gml</script>
+      <script>scripts\pass.gml</script>
+    </scripts>
   </scripts>
   <fonts name="fonts">
     <font>fonts\f_ui</font>
     <font>fonts\f_timer</font>
     <font>fonts\f_menu</font>
     <font>fonts\f_unlock</font>
+    <font>fonts\f_bigText</font>
   </fonts>
   <objects name="objects">
-    <object>objects\o_tile</object>
     <object>objects\o_board</object>
+    <object>objects\o_tile</object>
     <object>objects\o_loser</object>
     <object>objects\o_winner</object>
     <object>objects\o_player</object>

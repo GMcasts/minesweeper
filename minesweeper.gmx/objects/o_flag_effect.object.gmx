@@ -26,6 +26,7 @@
           <argument>
             <kind>1</kind>
             <string>o_score.TOTAL_FLAGS_DROPPED += 1;
+write_to_ini("total_flags_dropped", o_score.TOTAL_FLAGS_DROPPED);
 alarm[0] = 45;
 ratio = 5.0;
 </string>

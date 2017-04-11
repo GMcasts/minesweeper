@@ -32,9 +32,9 @@
       {
         room_goto(1);
       }
-    if(device_mouse_x(i) &gt;= room_width/2 - 200 &amp;&amp; device_mouse_x(i) &lt;= room_width/2 + 200 &amp;&amp;
+    if(o_score.TIMED_MODE_UNLOCKED==1 &amp;&amp; device_mouse_x(i) &gt;= room_width/2 - 200 &amp;&amp; device_mouse_x(i) &lt;= room_width/2 + 200 &amp;&amp;
     device_mouse_y(i) &gt;= 350 &amp;&amp; device_mouse_y(i) &lt;= 450 &amp;&amp;
-    device_mouse_check_button_pressed(i, mb_left) &amp;&amp; o_score.TIMED_MODE_UNLOCKED)
+    device_mouse_check_button_pressed(i, mb_left))
       {
         room_goto(2);
       }
@@ -86,7 +86,7 @@ draw_set_alpha(1);
 draw_set_color(c_white);
 draw_text(room_width/2, 375, "TIMED MODE");
 draw_set_alpha(0.5);
-if(!o_score.TIMED_MODE_UNLOCKED)
+if(o_score.TIMED_MODE_UNLOCKED != 1)
   {
   draw_set_color(c_red);
   draw_rectangle(room_width/2 - 200, 350, room_width/2 + 200, 450, false);

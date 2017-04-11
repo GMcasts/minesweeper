@@ -27,7 +27,8 @@
             <kind>1</kind>
             <string>image_speed = 0;
 opened_tiles = false;
-
+image_xscale = o_board.SCALE_RATIO;
+image_yscale = o_board.SCALE_RATIO;
 </string>
           </argument>
         </arguments>
@@ -102,71 +103,79 @@ mouse_y &gt;= bbox_top &amp;&amp; mouse_y &lt;= bbox_bottom){
             <string>///android and iphone specific
 
 //verify it is not a flag square
-if(!global.pause &amp;&amp; !global.cant_click)
-  {
-  for(i=0;i&lt;=0;i++){
-      if(o_player.hold_time&gt;500000 &amp;&amp; !o_player.flag_triggered &amp;&amp; device_mouse_x(i) &gt;= bbox_left &amp;&amp; device_mouse_x(i) &lt;= bbox_right &amp;&amp;
-      device_mouse_y(i) &gt;= bbox_top &amp;&amp; device_mouse_y(i) &lt;= bbox_bottom){
-          if(o_board.flags &gt; 0 &amp;&amp; image_index == 0){
+if (!global.pause &amp;&amp; !global.cant_click) {
+  for (i=0;i&lt;=0;i++){
+      // check to press and hold to potentially drop a flag
+      if (o_player.hold_time &gt; 200000 &amp;&amp; !o_player.flag_triggered &amp;&amp; device_mouse_x(i) &gt;= bbox_left &amp;&amp; device_mouse_x(i) &lt;= bbox_right &amp;&amp;
+      device_mouse_y(i) &gt;= bbox_top &amp;&amp; device_mouse_y(i) &lt;= bbox_bottom) {
+          if (o_board.flags &gt; 0 &amp;&amp; image_index == 0) {
               instance_create(x,y, o_flag_effect);
               image_index = 6;
               o_board.flags -= 1;
               o_player.flag_triggered = true;
           }
       }
-      if(device_mouse_check_button(i,mb_left)) {
-          with(o_player){
-              if(timer_active){
+      // register left click &amp; update player as needed (hold time logic)
+      if (device_mouse_check_button(i,mb_left)) {
+          with (o_player) {
+              if (timer_active) {
                   hold_time += current_time - start_time;
-              }else{
+              } else {
                   start_time = current_time;
                   timer_active = true;
               }
           }
       }
   
-      if(o_player.click_state == "CLEAR" &amp;&amp; !o_player.flag_triggered &amp;&amp; image_index != 6 &amp;&amp; device_mouse_check_button_released(i, mb_left) &amp;&amp; device_mouse_x(i) &gt;= bbox_left &amp;&amp; device_mouse_x(i) &lt;= bbox_right &amp;&amp;
-      device_mouse_y(i) &gt;= bbox_top &amp;&amp; device_mouse_y(i) &lt;= bbox_bottom){
+      // check click release actions
+      if (device_mouse_check_button_released(i, mb_left) &amp;&amp;
+        device_mouse_x(i) &gt;= bbox_left &amp;&amp;
+        device_mouse_x(i) &lt;= bbox_right &amp;&amp;
+        device_mouse_y(i) &gt;= bbox_top &amp;&amp;
+        device_mouse_y(i) &lt;= bbox_bottom &amp;&amp;
+        !o_player.flag_triggered
+      ) {
+        if (o_player.click_state == "CLEAR" &amp;&amp; !o_player.flag_triggered &amp;&amp; image_index != 6) {
           o_score.TOTAL_TILES_UNCOVERED += 1;
-          image_index = ds_grid_get(o_board.board, x/128, y/128);
-          if(image_index = 2) {
+          write_to_ini("total_tiles_uncovered", o_score.TOTAL_TILES_UNCOVERED);
+          image_index = ds_grid_get(o_board.board, x/o_board.TILE_WIDTH, y/o_board.TILE_WIDTH);
+          if (image_index = 2) {
               instance_create(0,0,o_shake);
               //keep track of the persistent bomb count
               o_score.TOTAL_BOMBS_HIT += 1;
+              write_to_ini("total_bombs_hit", o_score.TOTAL_BOMBS_HIT);
+              
               instance_create(room_width/2, room_height/2, o_loser);
-          }else {
-              //open_adjacent_tiles(x/128, y/128, false);
+          } else {
+              //open_adjacent_tiles(x/o_board.TILE_WIDTH, y/o_board.TILE_WIDTH, false);
               if(room==2 &amp;&amp; o_score.PAUSED)
                 {
                 o_score.PAUSED = false;
                 }
-              open_left_tiles(x/128, y/128, false);
-              open_right_tiles(x/128, y/128, false);
-              open_top_tiles(x/128, y/128, false);
-              open_bottom_tiles(x/128, y/128, false);
+              open_left_tiles(x/o_board.TILE_WIDTH, y/o_board.TILE_WIDTH, false);
+              open_right_tiles(x/o_board.TILE_WIDTH, y/o_board.TILE_WIDTH, false);
+              open_top_tiles(x/o_board.TILE_WIDTH, y/o_board.TILE_WIDTH, false);
+              open_bottom_tiles(x/o_board.TILE_WIDTH, y/o_board.TILE_WIDTH, false);
           }
-          
-          //instance_destroy();    
-      }else if(image_index == 6 &amp;&amp; !o_player.flag_triggered &amp;&amp; device_mouse_check_button_released(i, mb_left) &amp;&amp; device_mouse_x(i) &gt;= bbox_left &amp;&amp; device_mouse_x(i) &lt;= bbox_right &amp;&amp;
-      device_mouse_y(i) &gt;= bbox_top &amp;&amp; device_mouse_y(i) &lt;= bbox_bottom){
+        } else if (image_index == 6) {
           image_index = 0;
           o_board.flags += 1;
           o_score.TOTAL_FLAGS_PICKED_UP += 1;
-      }
-      
-      if(o_player.click_state == "FLAG" &amp;&amp; !o_player.flag_triggered &amp;&amp; device_mouse_check_button_released(i, mb_left) &amp;&amp; device_mouse_x(i) &gt;= bbox_left &amp;&amp; device_mouse_x(i) &lt;= bbox_right &amp;&amp;
-      device_mouse_y(i) &gt;= bbox_top &amp;&amp; device_mouse_y(i) &lt;= bbox_bottom){
-          if(image_index==6){
+          write_to_ini("total_flags_picked_up", o_score.TOTAL_FLAGS_PICKED_UP);
+        } else if (o_player.click_state == "FLAG") {
+          if(image_index == 6){
               image_index = 0;
               o_board.flags += 1;
               o_score.TOTAL_FLAGS_PICKED_UP += 1;
-          }else if(o_board.flags &gt; 0 &amp;&amp; image_index == 0){
+              write_to_ini("total_flags_picked_up", o_score.TOTAL_FLAGS_PICKED_UP);
+          } else if (o_board.flags &gt; 0 &amp;&amp; image_index == 0){
               image_index = 6;
               o_board.flags -= 1;
           }
+        }
       }
     }
-  }
+}
 </string>
           </argument>
         </arguments>
@@ -189,10 +198,10 @@ if(!global.pause &amp;&amp; !global.cant_click)
             <kind>1</kind>
             <string>///open tiles 
 if(image_index = 1 &amp;&amp; !opened_tiles){
-    open_left_tiles(x/128, y/128, false);
-    open_right_tiles(x/128, y/128, false);
-    open_top_tiles(x/128, y/128, false);
-    open_bottom_tiles(x/128, y/128, false);
+    open_left_tiles(x/o_board.TILE_WIDTH, y/o_board.TILE_WIDTH, false);
+    open_right_tiles(x/o_board.TILE_WIDTH, y/o_board.TILE_WIDTH, false);
+    open_top_tiles(x/o_board.TILE_WIDTH, y/o_board.TILE_WIDTH, false);
+    open_bottom_tiles(x/o_board.TILE_WIDTH, y/o_board.TILE_WIDTH, false);
     opened_tiles = true;
 }
 </string>

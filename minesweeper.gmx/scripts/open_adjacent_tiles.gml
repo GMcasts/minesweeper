@@ -28,8 +28,8 @@ ry = argument[1];
 terminate = argument[2];
 
 if(rx+1 <= 5){
-    dx = (rx+1)*128;
-    dy = ry*128;
+    dx = (rx+1)*o_board.TILE_WIDTH;
+    dy = ry*o_board.TILE_WIDTH;
     
     q = instance_nearest(dx, dy, o_tile)
     if(q.image_index == 0){
@@ -41,8 +41,8 @@ if(rx+1 <= 5){
 }
 
 if(rx-1 >= 0){
-    tx = (rx-1)*128;
-    ty = ry*128;
+    tx = (rx-1)*o_board.TILE_WIDTH;
+    ty = ry*o_board.TILE_WIDTH;
 
     o = instance_nearest(tx, ty, o_tile)
     if(o.image_index == 0){

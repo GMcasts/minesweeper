@@ -25,20 +25,38 @@
         <arguments>
           <argument>
             <kind>1</kind>
-            <string>TIMED_MODE_UNLOCKED = false;
-CHALLENGE_MODE_UNLOCKED = false;
-TOTAL_BOMBS_HIT = 0;
-TOTAL_ATTEMPTS = 0;
-TOTAL_WINS = 0;
-TOTAL_FLAGS_DROPPED = 0;
-TOTAL_FLAGS_PICKED_UP = 0;
-TOTAL_TILES_UNCOVERED = false;
-BEST_TIMED_RUN = 0;
+            <string>if file_exists("stats.ini") {
+    ini_open("stats.ini");
+    TIMED_MODE_UNLOCKED = ini_read_real("stats", "time_mode_unlocked", 0);
+    CHALLENGE_MODE_UNLOCKED = ini_read_real("stats", "challenge_mode_unlocked", 0);
+    TOTAL_BOMBS_HIT = ini_read_real("stats", "total_bombs_hit", 0);
+    TOTAL_ATTEMPTS = ini_read_real("stats", "total_attempts", 0);
+    TOTAL_WINS = ini_read_real("stats", "total_wins", 0);
+    TOTAL_FLAGS_DROPPED = ini_read_real("stats", "total_flags_dropped", 0);
+    TOTAL_FLAGS_PICKED_UP = ini_read_real("stats", "total_flags_picked_up", 0);
+    TOTAL_TILES_UNCOVERED = ini_read_real("stats", "total_tiles_uncovered", 0);
+    BEST_TIMED_RUN = ini_read_real("stats", "best_timed_run", 0);  
+    ini_close();
+} else {
+    ini_open("stats.ini");
+    TIMED_MODE_UNLOCKED = ini_write_real("stats", "time_mode_unlocked", 0);
+    CHALLENGE_MODE_UNLOCKED = ini_write_real("stats", "challenge_mode_unlocked", 0);
+    TOTAL_BOMBS_HIT = ini_write_real("stats", "total_bombs_hit", 0);
+    TOTAL_ATTEMPTS = ini_write_real("stats", "total_attempts", 0);
+    TOTAL_WINS = ini_write_real("stats", "total_wins", 0);
+    TOTAL_FLAGS_DROPPED = ini_write_real("stats", "total_flags_dropped", 0);
+    TOTAL_FLAGS_PICKED_UP = ini_write_real("stats", "total_flags_picked_up", 0);
+    TOTAL_TILES_UNCOVERED = ini_write_real("stats", "total_tiles_uncovered", 0);
+    BEST_TIMED_RUN = ini_write_real("stats", "best_timed_run", 0);
+    ini_close();
+}
+
 //TIMER_SECONDS = 0;
 started = false;
 seconds = 0;
 PAUSED = false;
 time_passed = 0;
+
 </string>
           </argument>
         </arguments>

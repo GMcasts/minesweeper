@@ -36,19 +36,19 @@ count = 0;
 rx = argument[0];
 ry = argument[1];
 // right side checking
-if((rx+1 <= 5 && ry-1 >= 0) && ds_grid_get(o_board.board, rx+1, ry-1)) {
+if((rx+1 <= o_board.BOARD_SIZE-1 && ry-1 >= 0) && ds_grid_get(o_board.board, rx+1, ry-1)) {
     if(bomb(rx+1,ry-1)){
         count += 1;
     }  
 }
 
-if((rx+1 <= 5 && ry >= 0) && ds_grid_get(o_board.board, rx+1, ry)) {
+if((rx+1 <= o_board.BOARD_SIZE-1 && ry >= 0) && ds_grid_get(o_board.board, rx+1, ry)) {
     if(bomb(rx+1,ry)){
         count += 1;
     }
 }
 
-if((rx+1 <= 5 && ry+1 >= 0) && ds_grid_get(o_board.board, rx+1, ry+1)) {
+if((rx+1 <= o_board.BOARD_SIZE-1 && ry+1 >= 0 && ry+1 <= o_board.BOARD_SIZE-1) && ds_grid_get(o_board.board, rx+1, ry+1)) {
     if(bomb(rx+1,ry+1)){
         count += 1;
     }
@@ -59,7 +59,7 @@ if(ry-1>=0 && ds_grid_get(o_board.board, rx,ry-1)) {
         count += 1;
     }
 }
-if(ry+1<=5 && ds_grid_get(o_board.board, rx,ry+1)) {
+if(ry+1<=o_board.BOARD_SIZE-1 && ds_grid_get(o_board.board, rx,ry+1)) {
     if(bomb(rx,ry+1)){
         count += 1;
     }
@@ -77,7 +77,7 @@ if((rx-1 >= 0 && ry >= 0) && ds_grid_get(o_board.board, rx-1, ry)) {
     }
 }
 
-if((rx-1 >= 0 && ry+1 >= 0 && ry+1 <=5) && ds_grid_get(o_board.board, rx-1, ry+1)) {
+if((rx-1 >= 0 && ry+1 >= 0 && ry+1 <=o_board.BOARD_SIZE-1) && ds_grid_get(o_board.board, rx-1, ry+1)) {
     if(bomb(rx-1,ry+1)){
         count += 1;
     }
